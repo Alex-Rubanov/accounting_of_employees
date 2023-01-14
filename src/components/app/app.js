@@ -8,9 +8,9 @@ import EmployeesAddForm from '../employees-add-form/employees-add-form';
 function App() {
 
     const data = [
-        {name: 'John Doe', salary: 850, increase: true},
-        {name: 'Michael Smith', salary: 1200, increase: false},
-        {name: 'Erick Gordon', salary: 2500, increase: false},
+        {name: 'John Doe', salary: 850, increase: true, id: 1},
+        {name: 'Michael Smith', salary: 1200, increase: false, id: 2},
+        {name: 'Erick Gordon', salary: 2500, increase: false, id: 3},
     ];
 
     return (
