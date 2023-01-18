@@ -16,7 +16,9 @@ class App extends Component {
                 {name: 'John Doe', salary: 850, increase: true, promotion: false, id: 1},
                 {name: 'Michael Smith', salary: 1200, increase: false, promotion: false, id: 2},
                 {name: 'Erick Gordon', salary: 2500, increase: false, promotion: false, id: 3},
-            ]
+            ],
+            request: '',
+            filter: 'all',
         }
         this.maxId = this.state.data.length;
     }
@@ -57,9 +59,40 @@ class App extends Component {
         }))
     }
 
+    searchEmployee = (data, request) => {
+        if (request.length === 0) {
+            return data;
+        }
+
+        return data.filter(item => {
+            return item.name[0].toLowerCase() === request[0].toLowerCase();
+        })
+    }
+
+    onUpdateSearch = (request) => {
+        this.setState(({request}));
+    }
+
+    filterPost = (data, filter) => {
+        switch(filter) {
+            case 'promoted':
+                return data.filter(item => item.promotion);
+            case 'salaryFilter':
+                return data.filter(item => item.salary > 1000);
+            default:
+                return data;
+        }
+    }
+
+    onUpdateFilter = (filter) => {
+        this.setState(({filter}))
+    }
+
     render() {
+        const {data, request, filter} = this.state;
         const employeeQty = this.state.data.length;
         const promotionStats = this.state.data.filter(item => item.increase).length;
+        const filteredData = this.filterPost(this.searchEmployee(data, request), filter);
 
         return (
             <div className="app">
@@ -68,12 +101,12 @@ class App extends Component {
                     promotionStats={promotionStats}/>
     
                 <div className="search-panel">
-                    <SearchPanel/>
-                    <AppFilter/>
+                    <SearchPanel onUpdateSearch={this.onUpdateSearch}/>
+                    <AppFilter filter={filter} onUpdateFilter={this.onUpdateFilter}/>
                 </div>
     
                 <EmployeesList 
-                    data={this.state.data} 
+                    data={filteredData} 
                     onDelete={this.deleteEmployee}
                     onToggleProp={this.onToggleProp}/>
                 <EmployeesAddForm onAdd={this.addEmployee}/>
